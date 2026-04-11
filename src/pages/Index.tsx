@@ -8,14 +8,7 @@ import spotBeach from "@/assets/spot-beach.jpg";
 import spotTrail from "@/assets/spot-trail.jpg";
 import spotWaterfall from "@/assets/spot-waterfall.jpg";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" },
-  }),
-};
+import { fadeUp } from "@/lib/animations";
 
 const stats = [
   { icon: Search, value: "8", label: "Pontos de Ecoturismo" },

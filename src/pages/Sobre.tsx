@@ -5,14 +5,7 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import aboutHero from "@/assets/about-hero.jpg";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.12, duration: 0.6, ease: "easeOut" },
-  }),
-};
+import { fadeUp } from "@/lib/animations";
 
 const impacts = [
   "Promover a educação ambiental de forma acessível e engajadora",

@@ -23,14 +23,7 @@ const spots = [
   { name: "Sambaqui da Beirada", category: "Histórico", rating: 3.9, difficulty: 1, image: spotBeach, desc: "Sítio arqueológico com sambaquis históricos à beira-mar." },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" },
-  }),
-};
+import { fadeUp } from "@/lib/animations";
 
 const Mapas = () => {
   const [search, setSearch] = useState("");

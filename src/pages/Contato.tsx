@@ -5,14 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.12, duration: 0.5, ease: "easeOut" },
-  }),
-};
+import { fadeUp } from "@/lib/animations";
 
 const Contato = () => (
   <Layout>
