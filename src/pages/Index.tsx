@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import FeaturedSpots from "@/components/FeaturedSpots";
+import StatsCounter from "@/components/StatsCounter";
 import FeaturedNews from "@/components/FeaturedNews";
+import Activities from "@/components/Activities";
+import DiscoverHub from "@/components/DiscoverHub";
 import heroImage from "@/assets/hero-nature.jpg";
-
 import { fadeUp } from "@/lib/animations";
 
 const Index = () => (
@@ -69,11 +70,17 @@ const Index = () => (
       </div>
     </section>
 
-    {/* Featured Spots */}
-    <FeaturedSpots />
+    {/* Stats */}
+    <StatsCounter />
 
-    {/* Featured News */}
+    {/* News */}
     <FeaturedNews />
+
+    {/* Activities */}
+    <Activities />
+
+    {/* Discover Hub CTA */}
+    <DiscoverHub />
   </Layout>
 );
 
