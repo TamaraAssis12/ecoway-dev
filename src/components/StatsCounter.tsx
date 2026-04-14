@@ -1,17 +1,19 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import { MapPin, TreePine, Leaf } from "lucide-react";
 
 interface Stat {
   value: number;
   suffix?: string;
   prefix?: string;
   label: string;
+  icon: React.ReactNode;
 }
 
 const stats: Stat[] = [
-  { prefix: ".", value: 6, label: "Destinos mapeados" },
-  { prefix: ".", value: 9, label: "Trilhas ecológicas" },
-  { prefix: ".", value: 103, label: "Espécies catalogadas" },
+  { value: 6, label: "Destinos mapeados", icon: <MapPin className="w-5 h-5" /> },
+  { value: 9, label: "Trilhas ecológicas", icon: <TreePine className="w-5 h-5" /> },
+  { value: 103, label: "Espécies catalogadas", icon: <Leaf className="w-5 h-5" /> },
 ];
 
 const AnimatedNumber = ({ value, prefix = "", suffix = "" }: { value: number; prefix?: string; suffix?: string }) => {
@@ -41,9 +43,9 @@ const AnimatedNumber = ({ value, prefix = "", suffix = "" }: { value: number; pr
 };
 
 const StatsCounter = () => (
-  <section className="py-20 bg-background">
-    <div className="container">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+  <div className="container">
+    <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/5 px-6 py-8 md:px-12 md:py-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
@@ -51,19 +53,25 @@ const StatsCounter = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.15, duration: 0.6 }}
-            className="text-center"
+            className="flex items-center gap-5 justify-center md:justify-start"
           >
-            <div className="text-5xl md:text-7xl font-heading font-bold text-primary mb-3">
-              <AnimatedNumber value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
+            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+              {stat.icon}
             </div>
-            <p className="text-muted-foreground text-sm uppercase tracking-widest font-medium">
-              {stat.label}
-            </p>
+            <div>
+              <div className="text-3xl md:text-4xl font-heading font-bold text-foreground leading-none mb-1">
+                <AnimatedNumber value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
+                <span className="text-primary">+</span>
+              </div>
+              <p className="text-muted-foreground text-sm font-medium">
+                {stat.label}
+              </p>
+            </div>
           </motion.div>
         ))}
       </div>
     </div>
-  </section>
+  </div>
 );
 
 export default StatsCounter;
