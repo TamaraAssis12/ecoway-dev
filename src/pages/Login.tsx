@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import loginBg from "@/assets/login-bg.jpg";
 
 const Login = () => {
   const [tab, setTab] = useState<"login" | "register">("login");
@@ -10,14 +11,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden font-['Poppins']">
-      {/* Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
+      {/* Image Background */}
+      <img
+        src={loginBg}
+        alt="Pedra Branca - Saquarema"
         className="absolute inset-0 w-full h-full object-cover z-0"
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260315_073750_51473149-4350-4920-ae24-c8214286f323.mp4"
       />
 
       {/* Overlay */}
@@ -38,16 +36,24 @@ const Login = () => {
             <p className="text-white/50 text-xs mt-1 font-['Source_Serif_4'] italic">Access your ecosystem</p>
           </div>
 
-          {/* Tabs */}
-          <div className="flex mb-8 gap-1">
+          {/* Tabs with pill border */}
+          <div className="relative flex mb-8 p-1 rounded-full border border-white/20 bg-white/5">
+            {/* Sliding indicator */}
+            <motion.div
+              className="absolute top-1 bottom-1 rounded-full bg-white/15"
+              layout
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              style={{
+                width: "calc(50% - 4px)",
+                left: tab === "login" ? 4 : "calc(50% + 0px)",
+              }}
+            />
             {(["login", "register"] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`flex-1 pb-2.5 text-sm font-medium transition-all duration-300 ${
-                  tab === t
-                    ? "text-white/90 border-b border-white/60"
-                    : "text-white/50 border-b border-transparent hover:text-white/70"
+                className={`relative z-10 flex-1 py-2 text-sm font-medium transition-colors duration-300 rounded-full ${
+                  tab === t ? "text-white" : "text-white/50 hover:text-white/70"
                 }`}
               >
                 {t === "login" ? "Entrar" : "Criar conta"}
@@ -55,131 +61,117 @@ const Login = () => {
             ))}
           </div>
 
-          {tab === "login" ? (
-            <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
-              <div>
-                <label className="text-xs font-medium text-white/60 mb-1.5 block">E-mail</label>
-                <div className="liquid-glass rounded-xl">
-                  <input
-                    placeholder="Digite seu e-mail"
-                    type="email"
-                    className="w-full h-12 bg-transparent px-4 text-sm text-white placeholder:text-white/40 outline-none"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="text-xs font-medium text-white/60 mb-1.5 block">Senha</label>
-                <div className="liquid-glass rounded-xl relative">
-                  <input
-                    placeholder="Digite sua senha"
-                    type={showPass ? "text" : "password"}
-                    className="w-full h-12 bg-transparent px-4 pr-12 text-sm text-white placeholder:text-white/40 outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPass(!showPass)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
-                  >
-                    {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="liquid-glass-strong w-full h-12 rounded-full text-sm font-medium text-white transition-transform duration-300"
+          <AnimatePresence mode="wait">
+            {tab === "login" ? (
+              <motion.form
+                key="login"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-5"
+                onSubmit={(e) => e.preventDefault()}
               >
-                Entrar
-              </motion.button>
-              <p className="text-center">
-                <a href="#" className="text-xs text-white/60 hover:text-white transition-colors">
-                  Esqueceu a senha?
-                </a>
-              </p>
-            </form>
-          ) : (
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div className="flex justify-center mb-1">
-                <div className="liquid-glass w-16 h-16 rounded-full flex items-center justify-center">
-                  <User className="w-6 h-6 text-white/50" />
-                </div>
-              </div>
-              <div>
-                <label className="text-xs font-medium text-white/60 mb-1.5 block">Nome completo</label>
-                <div className="liquid-glass rounded-xl">
-                  <input placeholder="Digite seu nome completo" className="w-full h-12 bg-transparent px-4 text-sm text-white placeholder:text-white/40 outline-none" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-medium text-white/60 mb-1.5 block">Gênero</label>
+                  <label className="text-xs font-medium text-white/60 mb-1.5 block">E-mail</label>
                   <div className="liquid-glass rounded-xl">
-                    <select className="w-full h-12 bg-transparent px-4 text-sm text-white outline-none appearance-none">
-                      <option className="text-black">Selecione</option>
-                      <option className="text-black">Masculino</option>
-                      <option className="text-black">Feminino</option>
-                      <option className="text-black">Outro</option>
-                    </select>
+                    <input placeholder="Digite seu e-mail" type="email" className="w-full h-12 bg-transparent px-4 text-sm text-white placeholder:text-white/40 outline-none" />
                   </div>
                 </div>
-                <div>
-                  <label className="text-xs font-medium text-white/60 mb-1.5 block">Nascimento</label>
-                  <div className="liquid-glass rounded-xl">
-                    <input type="date" className="w-full h-12 bg-transparent px-4 text-sm text-white outline-none [color-scheme:dark]" />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label className="text-xs font-medium text-white/60 mb-1.5 block">Celular</label>
-                <div className="liquid-glass rounded-xl">
-                  <input placeholder="(00) 00000-0000" className="w-full h-12 bg-transparent px-4 text-sm text-white placeholder:text-white/40 outline-none" />
-                </div>
-              </div>
-              <div>
-                <label className="text-xs font-medium text-white/60 mb-1.5 block">E-mail</label>
-                <div className="liquid-glass rounded-xl">
-                  <input placeholder="Digite seu e-mail" type="email" className="w-full h-12 bg-transparent px-4 text-sm text-white placeholder:text-white/40 outline-none" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-medium text-white/60 mb-1.5 block">Senha</label>
                   <div className="liquid-glass rounded-xl relative">
-                    <input
-                      placeholder="Sua senha"
-                      type={showPass ? "text" : "password"}
-                      className="w-full h-12 bg-transparent px-4 pr-10 text-sm text-white placeholder:text-white/40 outline-none"
-                    />
+                    <input placeholder="Digite sua senha" type={showPass ? "text" : "password"} className="w-full h-12 bg-transparent px-4 pr-12 text-sm text-white placeholder:text-white/40 outline-none" />
                     <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors">
-                      {showPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                      {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
+                  </div>
+                </div>
+                <motion.button type="submit" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="liquid-glass-strong w-full h-12 rounded-full text-sm font-medium text-white transition-transform duration-300">
+                  Entrar
+                </motion.button>
+                <p className="text-center">
+                  <a href="#" className="text-xs text-white/60 hover:text-white transition-colors">Esqueceu a senha?</a>
+                </p>
+              </motion.form>
+            ) : (
+              <motion.form
+                key="register"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-4"
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <div className="flex justify-center mb-1">
+                  <div className="liquid-glass w-16 h-16 rounded-full flex items-center justify-center">
+                    <User className="w-6 h-6 text-white/50" />
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-white/60 mb-1.5 block">Confirmar</label>
-                  <div className="liquid-glass rounded-xl relative">
-                    <input
-                      placeholder="Confirme"
-                      type={showConfirm ? "text" : "password"}
-                      className="w-full h-12 bg-transparent px-4 pr-10 text-sm text-white placeholder:text-white/40 outline-none"
-                    />
-                    <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors">
-                      {showConfirm ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                    </button>
+                  <label className="text-xs font-medium text-white/60 mb-1.5 block">Nome completo</label>
+                  <div className="liquid-glass rounded-xl">
+                    <input placeholder="Digite seu nome completo" className="w-full h-12 bg-transparent px-4 text-sm text-white placeholder:text-white/40 outline-none" />
                   </div>
                 </div>
-              </div>
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="liquid-glass-strong w-full h-12 rounded-full text-sm font-medium text-white transition-transform duration-300"
-              >
-                Criar conta
-              </motion.button>
-            </form>
-          )}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-medium text-white/60 mb-1.5 block">Gênero</label>
+                    <div className="liquid-glass rounded-xl">
+                      <select className="w-full h-12 bg-transparent px-4 text-sm text-white outline-none appearance-none">
+                        <option className="text-black">Selecione</option>
+                        <option className="text-black">Masculino</option>
+                        <option className="text-black">Feminino</option>
+                        <option className="text-black">Outro</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-white/60 mb-1.5 block">Nascimento</label>
+                    <div className="liquid-glass rounded-xl">
+                      <input type="date" className="w-full h-12 bg-transparent px-4 text-sm text-white outline-none [color-scheme:dark]" />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-white/60 mb-1.5 block">Celular</label>
+                  <div className="liquid-glass rounded-xl">
+                    <input placeholder="(00) 00000-0000" className="w-full h-12 bg-transparent px-4 text-sm text-white placeholder:text-white/40 outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-white/60 mb-1.5 block">E-mail</label>
+                  <div className="liquid-glass rounded-xl">
+                    <input placeholder="Digite seu e-mail" type="email" className="w-full h-12 bg-transparent px-4 text-sm text-white placeholder:text-white/40 outline-none" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-medium text-white/60 mb-1.5 block">Senha</label>
+                    <div className="liquid-glass rounded-xl relative">
+                      <input placeholder="Sua senha" type={showPass ? "text" : "password"} className="w-full h-12 bg-transparent px-4 pr-10 text-sm text-white placeholder:text-white/40 outline-none" />
+                      <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors">
+                        {showPass ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-white/60 mb-1.5 block">Confirmar</label>
+                    <div className="liquid-glass rounded-xl relative">
+                      <input placeholder="Confirme" type={showConfirm ? "text" : "password"} className="w-full h-12 bg-transparent px-4 pr-10 text-sm text-white placeholder:text-white/40 outline-none" />
+                      <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors">
+                        {showConfirm ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <motion.button type="submit" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="liquid-glass-strong w-full h-12 rounded-full text-sm font-medium text-white transition-transform duration-300">
+                  Criar conta
+                </motion.button>
+              </motion.form>
+            )}
+          </AnimatePresence>
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
