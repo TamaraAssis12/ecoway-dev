@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, Globe, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
@@ -11,9 +11,19 @@ const navLinks = [
   { label: "Contato", path: "/contato" },
 ];
 
+const languages = [
+  { code: "pt", label: "PT", full: "Português" },
+  { code: "en", label: "EN", full: "English" },
+  { code: "es", label: "ES", full: "Español" },
+];
+
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState("pt");
   const location = useLocation();
+
+  const selectedLang = languages.find((l) => l.code === currentLang)!;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
@@ -42,6 +52,50 @@ const Header = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          {/* Language selector */}
+          <div className="relative">
+            <button
+              onClick={() => setLangOpen(!langOpen)}
+              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-lg hover:bg-muted"
+            >
+              <Globe className="w-4 h-4" />
+              <span className="font-medium">{selectedLang.label}</span>
+              <ChevronDown className={`w-3 h-3 transition-transform ${langOpen ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {langOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setLangOpen(false)} />
+                  <motion.div
+                    initial={{ opacity: 0, y: -4, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -4, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 top-full mt-1 z-50 bg-card border border-border rounded-xl shadow-lg py-1 min-w-[140px]"
+                  >
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setCurrentLang(lang.code);
+                          setLangOpen(false);
+                        }}
+                        className={`w-full flex items-center gap-3 px-3 py-2 text-sm transition-colors hover:bg-muted ${
+                          currentLang === lang.code
+                            ? "text-primary font-medium"
+                            : "text-muted-foreground"
+                        }`}
+                      >
+                        <span className="font-semibold text-xs w-6">{lang.label}</span>
+                        <span>{lang.full}</span>
+                      </button>
+                    ))}
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+
           <Button asChild variant="default" size="sm">
             <Link to="/login" className="flex items-center gap-2">
               <User className="w-4 h-4" />
@@ -81,6 +135,27 @@ const Header = () => {
                   {link.label}
                 </Link>
               ))}
+
+              {/* Mobile language selector */}
+              <div className="flex items-center gap-2 py-2">
+                <Globe className="w-4 h-4 text-muted-foreground" />
+                <div className="flex gap-1">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => setCurrentLang(lang.code)}
+                      className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
+                        currentLang === lang.code
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:bg-muted"
+                      }`}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <Button asChild variant="default" size="sm" className="w-fit mt-2">
                 <Link to="/login" onClick={() => setMobileOpen(false)}>
                   <User className="w-4 h-4 mr-2" />
