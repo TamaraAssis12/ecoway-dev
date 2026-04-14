@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import loginBg from "@/assets/login-bg.jpg";
 
 const Login = () => {
   const [tab, setTab] = useState<"login" | "register">("login");
@@ -10,14 +11,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden font-['Poppins']">
-      {/* Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
+      {/* Image Background */}
+      <img
+        src={loginBg}
+        alt="Pedra Branca - Saquarema"
         className="absolute inset-0 w-full h-full object-cover z-0"
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260315_073750_51473149-4350-4920-ae24-c8214286f323.mp4"
       />
 
       {/* Overlay */}
@@ -38,16 +36,24 @@ const Login = () => {
             <p className="text-white/50 text-xs mt-1 font-['Source_Serif_4'] italic">Access your ecosystem</p>
           </div>
 
-          {/* Tabs */}
-          <div className="flex mb-8 gap-1">
+          {/* Tabs with pill border */}
+          <div className="relative flex mb-8 p-1 rounded-full border border-white/20 bg-white/5">
+            {/* Sliding indicator */}
+            <motion.div
+              className="absolute top-1 bottom-1 rounded-full bg-white/15"
+              layout
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              style={{
+                width: "calc(50% - 4px)",
+                left: tab === "login" ? 4 : "calc(50% + 0px)",
+              }}
+            />
             {(["login", "register"] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`flex-1 pb-2.5 text-sm font-medium transition-all duration-300 ${
-                  tab === t
-                    ? "text-white/90 border-b border-white/60"
-                    : "text-white/50 border-b border-transparent hover:text-white/70"
+                className={`relative z-10 flex-1 py-2 text-sm font-medium transition-colors duration-300 rounded-full ${
+                  tab === t ? "text-white" : "text-white/50 hover:text-white/70"
                 }`}
               >
                 {t === "login" ? "Entrar" : "Criar conta"}
