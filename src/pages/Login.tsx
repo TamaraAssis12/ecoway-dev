@@ -61,7 +61,17 @@ const Login = () => {
             ))}
           </div>
 
+          <AnimatePresence mode="wait">
           {tab === "login" ? (
+            <motion.form
+              key="login"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-5"
+              onSubmit={(e) => e.preventDefault()}
+            >
             <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
               <div>
                 <label className="text-xs font-medium text-white/60 mb-1.5 block">E-mail</label>
