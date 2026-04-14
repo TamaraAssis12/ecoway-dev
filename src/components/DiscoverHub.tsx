@@ -15,25 +15,6 @@ const DiscoverHub = () => (
   <section className="py-24">
     <div className="container">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Image side */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="relative rounded-3xl overflow-hidden aspect-[4/3]"
-        >
-          <img
-            src={discoverImage}
-            alt="Mata Atlântica"
-            loading="lazy"
-            width={800}
-            height={600}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-        </motion.div>
-
         {/* Content side */}
         <motion.div
           initial="hidden"
@@ -87,6 +68,24 @@ const DiscoverHub = () => (
               </Link>
             </Button>
           </motion.div>
+        </motion.div>
+        {/* Image side */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="relative rounded-3xl overflow-hidden aspect-[4/3]"
+        >
+          <img
+            src={discoverImage}
+            alt="Vista da Pedra Branca em Saquarema"
+            loading="lazy"
+            width={800}
+            height={600}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
         </motion.div>
       </div>
     </div>
